@@ -26,6 +26,8 @@ class LBDir(QtGui.QWidget):
     def __init__(self, dirTup, parent=None):
         print("LBDir started")
         super(LBDir, self).__init__(parent)
+        self.gBox = QtGui.QGroupBox()
+        self.layout = QtGui.QVBoxLayout()
         self.txtSize = "[  -  ]"
         self.dIndex = 0
         self.name = '  -  '
@@ -54,8 +56,10 @@ class LBDir(QtGui.QWidget):
         lay.addWidget(sizeLbl)
         lay.addWidget(sizeBarsLbl)
         lay.addWidget(self.btn)
-        self.setLayout(lay)
+        self.gBox.setLayout(lay)
 
+        self.layout.addWidget(self.gBox)
+        self.setLayout(self.layout)
 
     @QtCore.Slot()
     def sendSignal(self):
