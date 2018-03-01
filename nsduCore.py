@@ -138,30 +138,6 @@ class Dir:
         if dialog_active == True:
             self.dialog()
 
-
-
-        # I have    sdrs the subdir tuples
-        #           filz filz tuples
-        #               [(89881, /home/nrs/PycharmProjects/git_demos/application_rc.py), (10658, /home/nrs/PycharmProjects/git_demos/application.qrc), (7952, /home/nrs/PycharmProjects/git_demos/application.py)]
-        #
-        #           top_f & top_d
-        #               [(17598408, /home/nrs/PycharmProjects/git_demos/examples), (60653, /home/nrs/PycharmProjects/git_demos/images)]
-        #
-        #           totalSize
-        #               17767552
-        #   and some
-        #   functions,
-        #       prettySize([self], n) - takes n bytes -ret-> [nice txt n in mb/kb/w.e]
-        #       ownsize([self], path) - returns sum of sizes. should have been called to populate self.totalSize
-
-        # I want files & subdir tuples.
-        # files:
-        #     tuple of tuples ( ( prettySize(size), short name from top_f, sizeindex ) ... )
-        # subdirs:
-        #     tuple of tuples ( ( prettySize(size), short name from top_d, sizeindex, full path name ) ... )
-
-
-
     def mkGlobScoreSizeFactor(self):
         sz = self.totalSize
         self.glbSzFct = 2
@@ -322,25 +298,6 @@ class Dir:
         return term[0] * 16
 
 
-    # def toUI(self):
-    #     d = {'path':self.path, 'size':self.prettySize(self.totalSize), 'sdrs':self.sdrs, 'filz':self.filz}
-    #     return d
-    #
-    # def descend(self, sdi):
-    #     """method for ui to ctrl Dir object. sdi = sub dir index number """
-    #     newPath = self.sdrs[sdi][-1]
-    #     try:
-    #         return Dir(newPath, rcr_dep=self.rcr_dep+1, rcr_dep_max=self.rcr_dep_max, dialog_active=False, verbose=self.verbose)
-    #     except Exception as e:
-    #         print("Directory error. Sorry.... :( ")
-    #         print(e)
-    #
-    # def ascend(self):
-    #     if self.rcr_dep > 1:
-    #         self.rcr_dep -= 1
-    #     return Dir(self.path.lvl_up(), rcr_dep=self.rcr_dep, rcr_dep_max=self.rcr_dep_max, dialog_active=False, verbose=self.verbose)
-    #
-
     def dialog(self):
         import os
         import sys
@@ -362,9 +319,9 @@ class Dir:
 
         for siz, pth in self.top_d:
             sdcount += 1
-            print(str(sdcount) + '.' + '\t' + '[[' + self.prettySize(siz) + ']]  ' + pth.short())
-        
-        print("\n ---> You can explore any of the subdirectories (sub-folders) listed here - just enter the number next to it & have a look inside")
+            print("{} . {} [[ {} ]]   {}".format(sdcount, '\t', self.prettySize(siz), pth))
+        print("\n")
+        print("---> You can explore any of the subdirectories (sub-folders) listed here - just enter the number next to it & have a look inside")
         print("'..'  -  Go up one level. \n'd'  -  view current directory in Dolphin explorer (Kubuntu)...\n'e'  -  windows explorer...\n'o'  -  OS X (finder)...\n...or enter 'q' to quit to Python interpreter\n")
 
         dlg = input("Your choice: ")
@@ -381,7 +338,7 @@ class Dir:
         else:
             try:
                 dlg = int(dlg)
-                return Dir(path=self.sdrs[dlg-1][-1].get(), rcr_dep=self.rcr_dep, rcr_dep_max=self.rcr_dep_max, dialog_active=True, verbose=self.verbose)
+                return Dir(path=self.sdrs[dlg-1][-1], rcr_dep=self.rcr_dep, rcr_dep_max=self.rcr_dep_max, dialog_active=True, verbose=self.verbose)
             except Exception:
                 return self.dialog()
         
